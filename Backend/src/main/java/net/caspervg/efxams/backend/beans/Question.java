@@ -29,10 +29,11 @@ import org.jetbrains.annotations.Nullable;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-public class Question {
+public class Question implements Serializable {
 
     private UUID id;
     private String title;

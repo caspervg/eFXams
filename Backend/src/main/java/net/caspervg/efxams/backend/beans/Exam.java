@@ -31,11 +31,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
 @XmlRootElement(name="exam")
-public class Exam {
+public class Exam implements Serializable {
 
     private UUID id;
     private String name;
