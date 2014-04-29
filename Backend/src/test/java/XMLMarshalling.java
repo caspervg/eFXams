@@ -53,7 +53,10 @@ public class XmlMarshalling {
         List<Question> questionList = new ArrayList<>();
         questionList.addAll(Arrays.asList(q1, q2));
 
-        Exam examBefore = new Exam("TestExam", "TestAuthorName", questionList);
+        Exam examBefore = new Exam.ExamBuilder("TestExam")
+                .author("TestAuthorName")
+                .questions(questionList)
+                .build();
 
         File file = new File(getClass().getResource("/xml_marshalling.xml").getFile());
 
@@ -63,7 +66,6 @@ public class XmlMarshalling {
 
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         jaxbMarshaller.marshal(examBefore, file);
-        jaxbMarshaller.marshal(examBefore, System.out);
 
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         Exam examAfter = (Exam) jaxbUnmarshaller.unmarshal(file);
@@ -79,7 +81,11 @@ public class XmlMarshalling {
         List<Question> questionList = new ArrayList<>();
         questionList.addAll(Arrays.asList(q1, q2));
 
-        Exam examBefore = new Exam("TestExam", "TestAuthorName", questionList);
+        Exam examBefore = new Exam.ExamBuilder("TestExam")
+                .author("TestAuthorName")
+                .questions(questionList)
+                .build();
+
         File file = new File(getClass().getResource("/xml_marshalling.xml").getFile());
         new XmlBackend().marshallExam(examBefore, file);
 

@@ -29,7 +29,6 @@ import org.junit.Test;
 import com.google.gson.Gson;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +48,10 @@ public class JsonMarshalling {
         List<Question> questionList = new ArrayList<>();
         questionList.addAll(Arrays.asList(q1, q2));
 
-        Exam examBefore = new Exam("TestExam", "TestAuthorName", questionList);
+        Exam examBefore = new Exam.ExamBuilder("TestExam")
+                .author("TestAuthorName")
+                .questions(questionList)
+                .build();
 
         String jsonRep = new Gson().toJson(examBefore);
 
@@ -66,7 +68,10 @@ public class JsonMarshalling {
         List<Question> questionList = new ArrayList<>();
         questionList.addAll(Arrays.asList(q1, q2));
 
-        Exam examBefore = new Exam("TestExam", "TestAuthorName", questionList);
+        Exam examBefore = new Exam.ExamBuilder("TestExam")
+                .author("TestAuthorName")
+                .questions(questionList)
+                .build();
         File file = new File(getClass().getResource("/json_marshalling.json").getFile());
 
         new JsonBackend().marshallExam(examBefore, file);

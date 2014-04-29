@@ -83,12 +83,8 @@ public class Exam implements Serializable {
 
     @XmlElementWrapper
     @XmlElement(name="question")
-    private void setQuestions(List<Question> questions) {
-        if (questions != null) {
-            this.questions = questions;
-        } else {
-            this.questions = new ArrayList<>();
-        }
+    private void setQuestions(@NotNull List<Question> questions) {
+        this.questions = questions;
     }
 
     @Override
