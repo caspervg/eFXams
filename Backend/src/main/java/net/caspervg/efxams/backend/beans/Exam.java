@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 import java.util.UUID;
 
-@XmlRootElement(name="Exam")
+@XmlRootElement(name="exam")
 public class Exam {
 
     private UUID id;

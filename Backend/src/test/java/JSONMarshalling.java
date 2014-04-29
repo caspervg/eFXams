@@ -22,28 +22,28 @@
  * THE SOFTWARE.
  */
 
-import net.caspervg.efxams.backend.beans.Exam;
-import net.caspervg.efxams.backend.beans.Question;
+import net.caspervg.efxams.backend.JsonBackend;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import com.google.gson.Gson;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.caspervg.efxams.backend.beans.Exam;
+import net.caspervg.efxams.backend.beans.Question;
+
 import static org.junit.Assert.assertEquals;
 
-@RunWith(JUnit4.class)
-public class XMLMarshallingTest {
+public class JsonMarshalling {
 
     @Test
-    public void testXMLMarshalling() throws JAXBException {
+    public void testManualJsonMarshalling() {
         Question q1 = new Question("Question1Title", "Question1Question", "Question1Answer", null);
         Question q2 = new Question("Question2Title", "Question2Question", "Question2Answer", null);
 
@@ -52,17 +52,27 @@ public class XMLMarshallingTest {
 
         Exam examBefore = new Exam("TestExam", "TestAuthorName", questionList);
 
-        File file = new File(getClass().getResource("/xml_marshalling.xml").getFile());
+        String jsonRep = new Gson().toJson(examBefore);
 
+        Exam examAfter = new Gson().fromJson(jsonRep, Exam.class);
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(Exam.class);
-        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        assertEquals(examBefore, examAfter);
+    }
 
-        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        jaxbMarshaller.marshal(examBefore, file);
+    @Test
+    public void testAutomaticJsonMarshalling() throws IOException {
+        Question q1 = new Question("Question1Title", "Question1Question", "Question1Answer", null);
+        Question q2 = new Question("Question2Title", "Question2Question", "Question2Answer", null);
 
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        Exam examAfter = (Exam) jaxbUnmarshaller.unmarshal(file);
+        List<Question> questionList = new ArrayList<>();
+        questionList.addAll(Arrays.asList(q1, q2));
+
+        Exam examBefore = new Exam("TestExam", "TestAuthorName", questionList);
+        File file = new File(getClass().getResource("/json_marshalling.json").getFile());
+
+        JsonBackend.marshallJson(examBefore, file);
+
+        Exam examAfter = JsonBackend.unmarshallJson(file);
 
         assertEquals(examBefore, examAfter);
     }
