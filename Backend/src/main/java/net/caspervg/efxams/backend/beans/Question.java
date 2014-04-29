@@ -46,7 +46,9 @@ public class Question implements Serializable {
     private @NotNull List<String> bannedWords;
 
     public Question() {
-        // No-arg constructor
+        hints = new ArrayList<>();
+        allowedWords = new ArrayList<>();
+        bannedWords = new ArrayList<>();
     }
 
     public UUID getId() {
@@ -91,7 +93,7 @@ public class Question implements Serializable {
     }
 
     @XmlElementWrapper
-    @XmlElement(name="hint")
+    @XmlElement(name="word")
     private void setHints(@NotNull List<String> hints) {
         this.hints = hints;
     }
@@ -176,6 +178,8 @@ public class Question implements Serializable {
     }
 
     public Question(QuestionBuilder builder) {
+        this();
+
         this.id = builder.id;
         this.title = builder.title;
         this.query = builder.query;

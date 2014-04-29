@@ -24,6 +24,7 @@
 
 package net.caspervg.efxams.backend.beans;
 
+import net.caspervg.efxams.backend.ExamBackend;
 import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -32,6 +33,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,30 +43,18 @@ public class Exam implements Serializable {
     private UUID id;
     private String name;
     private String author;
-    private List<Question> questions;
+    private @NotNull List<Question> questions;
 
     public Exam() {
-        // No-arg constructor
-    }
-
-    public Exam(String name, String author, @NotNull List<Question> questions) {
-        this.name = name;
-        this.author = author;
-        this.questions = questions;
-
-        this.id = UUID.randomUUID();
+        questions = new ArrayList<>();
     }
 
     public UUID getId() {
         return id;
     }
 
-    /**
-     * Do not set the UUID manually. This method is for binding use only
-     * @param id UUID of the Exam
-     */
     @XmlAttribute
-    public void setId(UUID id) {
+    private void setId(UUID id) {
         this.id = id;
     }
 
@@ -73,7 +63,7 @@ public class Exam implements Serializable {
     }
 
     @XmlElement
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
 
@@ -82,18 +72,23 @@ public class Exam implements Serializable {
     }
 
     @XmlElement
-    public void setAuthor(String author) {
+    private void setAuthor(String author) {
         this.author = author;
     }
 
+    @NotNull
     public List<Question> getQuestions() {
         return questions;
     }
 
     @XmlElementWrapper
     @XmlElement(name="question")
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+    private void setQuestions(List<Question> questions) {
+        if (questions != null) {
+            this.questions = questions;
+        } else {
+            this.questions = new ArrayList<>();
+        }
     }
 
     @Override
@@ -106,12 +101,47 @@ public class Exam implements Serializable {
             if (! this.id.equals(exam.getId())) return false;
             if (! this.name.equals(exam.getName())) return false;
 
-            if (! (this.questions.size() == exam.getQuestions().size())) return false;
-            for (int i = 0; i < this.questions.size(); i++) {
-                if (! this.questions.get(i).equals(exam.getQuestions().get(i))) return false;
-            }
+            if (! this.questions.equals(exam.getQuestions())) return false;
 
             return true;
         }
+    }
+
+    public static class ExamBuilder {
+
+        // Required
+        private final UUID id;
+        private final String name;
+
+        // Optional
+        private String author = "";
+        private @NotNull List<Question> questions = new ArrayList<>();
+
+        public ExamBuilder(String name) {
+            this.id = UUID.randomUUID();
+            this.name = name;
+        }
+
+        public ExamBuilder author(String value) {
+            this.author = value;
+            return this;
+        }
+
+        public ExamBuilder questions(@NotNull List<Question> value) {
+            this.questions = value;
+            return this;
+        }
+
+        public Exam build() {
+            return new Exam(this);
+        }
+    }
+
+    public Exam(ExamBuilder builder) {
+        this();
+        this.id = builder.id;
+        this.name = builder.name;
+        this.author = builder.author;
+        this.questions = builder.questions;
     }
 }
