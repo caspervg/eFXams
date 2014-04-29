@@ -24,13 +24,18 @@
 
 package net.caspervg.efxams.backend.binary;
 
-import com.google.gson.Gson;
 import net.caspervg.efxams.backend.ExamBackend;
 import net.caspervg.efxams.backend.beans.Exam;
 import net.caspervg.efxams.backend.exception.ExamBackendException;
 
 import java.io.*;
 
+/**
+ * @deprecated because of possible version incompatibilities and incompatibility with non-Java applications
+ * @see net.caspervg.efxams.backend.json.JsonBackend
+ * @see net.caspervg.efxams.backend.xml.XmlBackend
+ */
+@Deprecated
 public class BinaryBackend implements ExamBackend {
 
     @Override
