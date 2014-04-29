@@ -43,8 +43,12 @@ public class XmlMarshalling {
 
     @Test
     public void testXmlManualMarshalling() throws JAXBException {
-        Question q1 = new Question("Question1Title", "Question1Question", "Question1Answer", null);
-        Question q2 = new Question("Question2Title", "Question2Question", "Question2Answer", null);
+        Question q1 = new Question.QuestionBuilder("Question1Title", "Question1Question", "Question1Answer")
+                .hints(Arrays.asList("Hint1", "Hint2"))
+                .allowedWords(Arrays.asList("Allowed1", "Allowed2"))
+                .bannedWords(Arrays.asList("Banned1", "Banned2"))
+                .build();
+        Question q2 = new Question.QuestionBuilder("Question2Title", "Question2Question", "Question2Answer").build();
 
         List<Question> questionList = new ArrayList<>();
         questionList.addAll(Arrays.asList(q1, q2));
@@ -59,6 +63,7 @@ public class XmlMarshalling {
 
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         jaxbMarshaller.marshal(examBefore, file);
+        jaxbMarshaller.marshal(examBefore, System.out);
 
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         Exam examAfter = (Exam) jaxbUnmarshaller.unmarshal(file);
@@ -68,8 +73,8 @@ public class XmlMarshalling {
 
     @Test
     public void testXmlAutomaticMarshalling() throws ExamBackendException {
-        Question q1 = new Question("Question1Title", "Question1Question", "Question1Answer", null);
-        Question q2 = new Question("Question2Title", "Question2Question", "Question2Answer", null);
+        Question q1 = new Question.QuestionBuilder("Question1Title", "Question1Question", "Question1Answer").build();
+        Question q2 = new Question.QuestionBuilder("Question2Title", "Question2Question", "Question2Answer").build();
 
         List<Question> questionList = new ArrayList<>();
         questionList.addAll(Arrays.asList(q1, q2));

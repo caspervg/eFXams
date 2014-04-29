@@ -24,12 +24,14 @@
 
 package net.caspervg.efxams.backend.beans;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,31 +41,20 @@ public class Question implements Serializable {
     private String title;
     private String query;
     private String answer;
-    private List<String> hints;
+    private @NotNull List<String> hints;
+    private @NotNull List<String> allowedWords;
+    private @NotNull List<String> bannedWords;
 
     public Question() {
         // No-arg constructor
-    }
-
-    public Question(String title, String query, String answer, @Nullable List<String> hints) {
-        this.title = title;
-        this.query = query;
-        this.answer = answer;
-        this.hints = hints;
-
-        this.id = UUID.randomUUID();
     }
 
     public UUID getId() {
         return id;
     }
 
-    /**
-     * Do not set the UUID manually. This method is for binding use only
-     * @param id UUID of the Question
-     */
     @XmlAttribute
-    public void setId(UUID id) {
+    private void setId(UUID id) {
         this.id = id;
     }
 
@@ -72,7 +63,7 @@ public class Question implements Serializable {
     }
 
     @XmlElement
-    public void setTitle(String title) {
+    private void setTitle(String title) {
         this.title = title;
     }
 
@@ -81,7 +72,7 @@ public class Question implements Serializable {
     }
 
     @XmlElement
-    public void setQuery(String query) {
+    private void setQuery(String query) {
         this.query = query;
     }
 
@@ -90,18 +81,41 @@ public class Question implements Serializable {
     }
 
     @XmlElement
-    public void setAnswer(String answer) {
+    private void setAnswer(String answer) {
         this.answer = answer;
     }
 
+    @NotNull
     public List<String> getHints() {
         return hints;
     }
 
     @XmlElementWrapper
     @XmlElement(name="hint")
-    public void setHints(List<String> hints) {
+    private void setHints(@NotNull List<String> hints) {
         this.hints = hints;
+    }
+
+    @NotNull
+    public List<String> getBannedWords() {
+        return bannedWords;
+    }
+
+    @XmlElementWrapper
+    @XmlElement(name="word")
+    private void setBannedWords(@NotNull List<String> bannedWords) {
+        this.bannedWords = bannedWords;
+    }
+
+    @NotNull
+    public List<String> getAllowedWords() {
+        return allowedWords;
+    }
+
+    @XmlElementWrapper
+    @XmlElement(name="word")
+    private void setAllowedWords(@NotNull List<String> allowedWords) {
+        this.allowedWords = allowedWords;
     }
 
     @Override
@@ -114,18 +128,61 @@ public class Question implements Serializable {
             if (! this.query.equals(question.getQuery())) return false;
             if (! this.answer.equals(question.getAnswer())) return false;
 
-            if (this.hints == null && question.getHints() != null) return false;
-            if (this.hints != null && question.getHints() == null) return false;
-
-            if (this.hints == null || this.getHints() == null) return true;
-
-            if (! (this.hints.size() == question.getHints().size())) return false;
-            for (int i = 0; i < this.hints.size(); i++) {
-                if (! this.hints.get(i).equals(question.getHints().get(i))) return false;
-            }
+            if (! this.hints.equals(question.getHints())) return false;
+            if (! this.allowedWords.equals(question.getAllowedWords())) return false;
+            if (! this.bannedWords.equals(question.getBannedWords())) return false;
 
             return true;
         }
+    }
+
+    public static class QuestionBuilder {
+        // Required
+        private final UUID id;
+        private final String title;
+        private final String query;
+        private final String answer;
+
+        // Optional
+        private List<String> hints = new ArrayList<>();
+        private List<String> allowedWords = new ArrayList<>();
+        private List<String> bannedWords = new ArrayList<>();
+
+        public QuestionBuilder(String title, String query, String answer) {
+            this.id = UUID.randomUUID();
+            this.title = title;
+            this.query = query;
+            this.answer = answer;
+        }
+
+        public QuestionBuilder hints(@NotNull List<String> value) {
+            this.hints = value;
+            return this;
+        }
+
+        public QuestionBuilder allowedWords(@NotNull List<String> value) {
+            this.allowedWords = value;
+            return this;
+        }
+
+        public QuestionBuilder bannedWords(@NotNull List<String> value) {
+            this.bannedWords = value;
+            return this;
+        }
+
+        public Question build() {
+            return new Question(this);
+        }
+    }
+
+    public Question(QuestionBuilder builder) {
+        this.id = builder.id;
+        this.title = builder.title;
+        this.query = builder.query;
+        this.answer = builder.answer;
+        this.hints = builder.hints;
+        this.allowedWords = builder.allowedWords;
+        this.bannedWords = builder.bannedWords;
     }
 
 }
