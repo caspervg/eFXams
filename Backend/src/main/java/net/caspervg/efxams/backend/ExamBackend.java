@@ -24,33 +24,12 @@
 
 package net.caspervg.efxams.backend;
 
-import com.google.gson.Gson;
 import net.caspervg.efxams.backend.beans.Exam;
+import net.caspervg.efxams.backend.exception.ExamBackendException;
 
-import java.io.*;
+import java.io.File;
 
-public class JsonBackend {
-
-    /**
-     * Writes the exam data to a JSON file
-     * @param exam Exam to write
-     * @param file File to write in
-     * @throws IOException
-     */
-    public static void marshallJson(Exam exam, File file) throws IOException {
-        Writer writer = new FileWriter(file);
-        new Gson().toJson(exam, writer);
-        writer.close();
-    }
-
-    /**
-     * Reads exam data from a JSON file
-     * @param file File to read from
-     * @return Exam
-     * @throws IOException
-     */
-    public static Exam unmarshallJson(File file) throws IOException {
-        Reader reader = new FileReader(file);
-        return new Gson().fromJson(reader, Exam.class);
-    }
+public interface ExamBackend {
+    public void marshallExam(Exam exam, File file) throws ExamBackendException;
+    public Exam unmarshallExam(File file) throws ExamBackendException;
 }
