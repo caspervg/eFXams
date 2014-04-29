@@ -1,5 +1,6 @@
 # Compiled Files #
 *.class
+Backend/target/
 
 # Package Files #
 *.jar
