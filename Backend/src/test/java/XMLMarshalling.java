@@ -22,7 +22,8 @@
  * THE SOFTWARE.
  */
 
-import net.caspervg.efxams.backend.XmlBackend;
+import net.caspervg.efxams.backend.exception.ExamBackendException;
+import net.caspervg.efxams.backend.xml.XmlBackend;
 import net.caspervg.efxams.backend.beans.Exam;
 import net.caspervg.efxams.backend.beans.Question;
 import org.junit.Test;
@@ -66,7 +67,7 @@ public class XmlMarshalling {
     }
 
     @Test
-    public void testXmlAutomaticMarshalling() throws JAXBException {
+    public void testXmlAutomaticMarshalling() throws ExamBackendException {
         Question q1 = new Question("Question1Title", "Question1Question", "Question1Answer", null);
         Question q2 = new Question("Question2Title", "Question2Question", "Question2Answer", null);
 
@@ -75,10 +76,10 @@ public class XmlMarshalling {
 
         Exam examBefore = new Exam("TestExam", "TestAuthorName", questionList);
         File file = new File(getClass().getResource("/xml_marshalling.xml").getFile());
-        XmlBackend.marshallXml(examBefore, file);
+        new XmlBackend().marshallExam(examBefore, file);
 
-        Exam examAfter = XmlBackend.unmarshallXml(file);
-
+        Exam examAfter = new XmlBackend().unmarshallExam(file);
         assertEquals(examBefore, examAfter);
     }
+
 }

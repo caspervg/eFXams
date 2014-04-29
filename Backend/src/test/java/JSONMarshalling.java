@@ -22,10 +22,9 @@
  * THE SOFTWARE.
  */
 
-import net.caspervg.efxams.backend.JsonBackend;
+import net.caspervg.efxams.backend.exception.ExamBackendException;
+import net.caspervg.efxams.backend.json.JsonBackend;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.google.gson.Gson;
 
@@ -60,7 +59,7 @@ public class JsonMarshalling {
     }
 
     @Test
-    public void testAutomaticJsonMarshalling() throws IOException {
+    public void testAutomaticJsonMarshalling() throws ExamBackendException {
         Question q1 = new Question("Question1Title", "Question1Question", "Question1Answer", null);
         Question q2 = new Question("Question2Title", "Question2Question", "Question2Answer", null);
 
@@ -70,9 +69,9 @@ public class JsonMarshalling {
         Exam examBefore = new Exam("TestExam", "TestAuthorName", questionList);
         File file = new File(getClass().getResource("/json_marshalling.json").getFile());
 
-        JsonBackend.marshallJson(examBefore, file);
+        new JsonBackend().marshallExam(examBefore, file);
 
-        Exam examAfter = JsonBackend.unmarshallJson(file);
+        Exam examAfter = new JsonBackend().unmarshallExam(file);
 
         assertEquals(examBefore, examAfter);
     }
