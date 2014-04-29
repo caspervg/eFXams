@@ -30,12 +30,25 @@ import net.caspervg.efxams.backend.beans.Exam;
 import java.io.*;
 
 public class JsonBackend {
+
+    /**
+     * Writes the exam data to a JSON file
+     * @param exam Exam to write
+     * @param file File to write in
+     * @throws IOException
+     */
     public static void marshallJson(Exam exam, File file) throws IOException {
         Writer writer = new FileWriter(file);
         new Gson().toJson(exam, writer);
         writer.close();
     }
 
+    /**
+     * Reads exam data from a JSON file
+     * @param file File to read from
+     * @return Exam
+     * @throws IOException
+     */
     public static Exam unmarshallJson(File file) throws IOException {
         Reader reader = new FileReader(file);
         return new Gson().fromJson(reader, Exam.class);

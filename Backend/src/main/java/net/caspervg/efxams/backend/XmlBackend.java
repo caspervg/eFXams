@@ -33,10 +33,24 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
 public class XmlBackend {
+
+    /**
+     * Writes the exam data to an XML file, using the default setting for formatting (pretty print)
+     * @param exam Exam to write
+     * @param file File to write in
+     * @throws JAXBException
+     */
     public static void marshallXml(Exam exam, File file) throws JAXBException {
         marshallXml(exam, file, true);
     }
 
+    /**
+     * Writes the exam data to an XML file
+     * @param exam Exam to write
+     * @param file File to write in
+     * @param formatOutput Should the output be formatted (pretty print) or not
+     * @throws JAXBException
+     */
     public static void marshallXml(Exam exam, File file, boolean formatOutput) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(Exam.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -46,6 +60,12 @@ public class XmlBackend {
         jaxbMarshaller.marshal(exam, file);
     }
 
+    /**
+     * Reads exam data from an XML file
+     * @param file File to read from
+     * @return Exam
+     * @throws JAXBException
+     */
     public static Exam unmarshallXml(File file) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(Exam.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
