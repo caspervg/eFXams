@@ -31,11 +31,10 @@ import net.caspervg.efxams.backend.exception.ExamBackendException;
 import java.io.*;
 
 /**
- * @deprecated because of possible version incompatibilities and incompatibility with non-Java applications
+ * This backend exists only as a fallback, please use either the JsonBackend or XmlBackend instead.
  * @see net.caspervg.efxams.backend.json.JsonBackend
  * @see net.caspervg.efxams.backend.xml.XmlBackend
  */
-@Deprecated
 public class BinaryBackend implements ExamBackend {
 
     @Override
