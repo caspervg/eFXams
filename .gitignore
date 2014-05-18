@@ -1,6 +1,8 @@
 # Compiled Files #
 *.class
 Backend/target/
+UserInterface/target/
+CommandLine/target/
 
 # Package Files #
 *.jar
