@@ -97,11 +97,13 @@ public class WriteHandler implements CommandHandler {
                         .map(String::trim)
                         .collect(Collectors.toCollection(LinkedList::new));
 
-                questionList.add(new Question.QuestionBuilder(questionName, questionQuery, questionName)
+                questionList.add(new Question.QuestionBuilder(questionName, questionQuery, questionAnswer)
                         .allowedWords(allowedList)
                         .bannedWords(bannedList)
                         .hints(hintList)
                         .build());
+
+                ++counter;
             } else {
                 stopped = true;
             }
