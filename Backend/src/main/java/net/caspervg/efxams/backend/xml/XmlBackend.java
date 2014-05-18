@@ -41,6 +41,7 @@ public class XmlBackend implements ExamBackend {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Exam.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
             jaxbMarshaller.marshal(exam, file);
         } catch (JAXBException ex) {

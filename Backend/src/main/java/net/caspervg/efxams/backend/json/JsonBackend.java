@@ -25,6 +25,7 @@
 package net.caspervg.efxams.backend.json;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.caspervg.efxams.backend.ExamBackend;
 import net.caspervg.efxams.backend.beans.Exam;
 import net.caspervg.efxams.backend.exception.ExamBackendException;
@@ -45,7 +46,8 @@ public class JsonBackend implements ExamBackend {
     @Override
     public Exam unmarshallExam(File file) throws ExamBackendException {
         try (Reader reader = new FileReader(file)) {
-            return new Gson().fromJson(reader, Exam.class);
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            return gson.fromJson(reader, Exam.class);
         } catch (IOException ex) {
             throw new ExamBackendException("Failed to read exam from JSON file", ex);
         }
