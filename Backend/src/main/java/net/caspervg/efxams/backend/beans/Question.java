@@ -25,15 +25,12 @@
 package net.caspervg.efxams.backend.beans;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Question implements Serializable {
 
@@ -41,14 +38,14 @@ public class Question implements Serializable {
     private String title;
     private String query;
     private String answer;
-    private @NotNull List<String> hints;
-    private @NotNull List<String> allowedWords;
-    private @NotNull List<String> bannedWords;
+    private @NotNull LinkedList<String> hints;
+    private @NotNull Set<String> allowedWords;
+    private @NotNull Set<String> bannedWords;
 
     public Question() {
-        hints = new ArrayList<>();
-        allowedWords = new ArrayList<>();
-        bannedWords = new ArrayList<>();
+        hints = new LinkedList<>();
+        allowedWords = new HashSet<>();
+        bannedWords = new HashSet<>();
     }
 
     public UUID getId() {
@@ -88,35 +85,35 @@ public class Question implements Serializable {
     }
 
     @NotNull
-    public List<String> getHints() {
+    public LinkedList<String> getHints() {
         return hints;
     }
 
     @XmlElementWrapper
     @XmlElement(name="word")
-    private void setHints(@NotNull List<String> hints) {
+    private void setHints(@NotNull LinkedList<String> hints) {
         this.hints = hints;
     }
 
     @NotNull
-    public List<String> getBannedWords() {
+    public Set<String> getBannedWords() {
         return bannedWords;
     }
 
     @XmlElementWrapper
     @XmlElement(name="word")
-    private void setBannedWords(@NotNull List<String> bannedWords) {
+    private void setBannedWords(@NotNull Set<String> bannedWords) {
         this.bannedWords = bannedWords;
     }
 
     @NotNull
-    public List<String> getAllowedWords() {
+    public Set<String> getAllowedWords() {
         return allowedWords;
     }
 
     @XmlElementWrapper
     @XmlElement(name="word")
-    private void setAllowedWords(@NotNull List<String> allowedWords) {
+    private void setAllowedWords(@NotNull Set<String> allowedWords) {
         this.allowedWords = allowedWords;
     }
 
@@ -146,9 +143,9 @@ public class Question implements Serializable {
         private final String answer;
 
         // Optional
-        private List<String> hints = new ArrayList<>();
-        private List<String> allowedWords = new ArrayList<>();
-        private List<String> bannedWords = new ArrayList<>();
+        private LinkedList<String> hints = new LinkedList<>();
+        private Set<String> allowedWords = new HashSet<>();
+        private Set<String> bannedWords = new HashSet<>();
 
         public QuestionBuilder(String title, String query, String answer) {
             this.id = UUID.randomUUID();
@@ -157,17 +154,17 @@ public class Question implements Serializable {
             this.answer = answer;
         }
 
-        public QuestionBuilder hints(@NotNull List<String> value) {
+        public QuestionBuilder hints(@NotNull LinkedList<String> value) {
             this.hints = value;
             return this;
         }
 
-        public QuestionBuilder allowedWords(@NotNull List<String> value) {
+        public QuestionBuilder allowedWords(@NotNull Set<String> value) {
             this.allowedWords = value;
             return this;
         }
 
-        public QuestionBuilder bannedWords(@NotNull List<String> value) {
+        public QuestionBuilder bannedWords(@NotNull Set<String> value) {
             this.bannedWords = value;
             return this;
         }
