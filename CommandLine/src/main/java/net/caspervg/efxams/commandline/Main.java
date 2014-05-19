@@ -61,7 +61,7 @@ public class Main {
 
             CommandHandler commandHandler = commandHandlers.get(jc.getParsedCommand());
             commandHandler.handle(commands.get(jc.getParsedCommand()));
-        } catch (ParameterException ex) {
+        } catch (ParameterException | NullPointerException ex) {
             jc.usage();
         }
 
