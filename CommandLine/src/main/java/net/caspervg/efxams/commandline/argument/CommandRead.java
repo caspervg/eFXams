@@ -32,7 +32,7 @@ import java.io.File;
 @Parameters(separators = "=", commandDescription = "Read exercises and answers from a file, without solving them")
 public class CommandRead implements Command {
 
-    @Parameter(names = {"-file"}, description = "File to read the exercises from", converter = FileConverter.class)
+    @Parameter(names = {"-f", "--file"}, description = "File to read the exercises from", converter = FileConverter.class)
     private File file;
 
     @Override

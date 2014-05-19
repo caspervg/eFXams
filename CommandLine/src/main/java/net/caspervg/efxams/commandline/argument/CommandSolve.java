@@ -34,7 +34,7 @@ import java.util.List;
 @Parameters(separators = "=", commandDescription = "Solve exercises from a file")
 public class CommandSolve implements Command {
 
-    @Parameter(names = {"-file"}, description = "File to solve the exercises from", converter = FileConverter.class)
+    @Parameter(names = {"-f", "--file"}, description = "File to solve the exercises from", converter = FileConverter.class)
     private File file;
 
     @Parameter(names = "--solver", description = "Person solving the exercises")
