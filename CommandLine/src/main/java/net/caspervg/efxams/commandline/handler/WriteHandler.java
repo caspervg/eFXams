@@ -55,7 +55,7 @@ public class WriteHandler implements CommandHandler {
 
         Scanner in = new Scanner(System.in);
 
-        System.out.print("Please enter the name of the examination: ");
+        System.out.println("Please enter the name of the examination: ");
         String examName = in.nextLine();
 
         System.out.println("Please enter the name of the author of the examination: ");
@@ -66,12 +66,11 @@ public class WriteHandler implements CommandHandler {
         List<Question> questionList = new ArrayList<>();
 
         while(! stopped) {
-            System.out.println(String.format("Enter the title for question %d. Write STOP to stop adding more questions", counter));
-            String questionName = in.nextLine();
+            System.out.println(String.format("Enter the query for question %d. Write STOP to stop adding new questions.", counter));
+            String questionQuery = in.nextLine();
 
-            if (! questionName.equals("STOP")) {
-                System.out.println(String.format("Enter the query for question %d", counter));
-                String questionQuery = in.nextLine();
+            if (! questionQuery.equals("STOP")) {
+
 
                 System.out.println(String.format("Enter the answer for question %d", counter));
                 String questionAnswer = in.nextLine();
@@ -81,6 +80,7 @@ public class WriteHandler implements CommandHandler {
                 HashSet<String> allowedList = Arrays.asList(allowed.split(","))
                         .stream()
                         .map(String::trim)
+                        .filter(s -> ! s.isEmpty())
                         .collect(Collectors.toCollection(HashSet::new));
 
                 System.out.println(String.format("Enter a comma-delimited list of keywords that the answer to question %d may not contain to be counted valid", counter));
@@ -88,6 +88,7 @@ public class WriteHandler implements CommandHandler {
                 HashSet<String> bannedList = Arrays.asList(banned.split(","))
                         .stream()
                         .map(String::trim)
+                        .filter(s -> ! s.isEmpty())
                         .collect(Collectors.toCollection(HashSet::new));
 
                 System.out.println(String.format("Enter a comma-delimited list of hints that the user can receive for question %d", counter));
@@ -95,9 +96,11 @@ public class WriteHandler implements CommandHandler {
                 LinkedList<String> hintList = Arrays.asList(hints.split(","))
                         .stream()
                         .map(String::trim)
+                        .filter(s -> ! s.isEmpty())
                         .collect(Collectors.toCollection(LinkedList::new));
+                System.out.println(hintList.size());
 
-                questionList.add(new Question.QuestionBuilder(questionName, questionQuery, questionAnswer)
+                questionList.add(new Question.QuestionBuilder(questionQuery, questionAnswer)
                         .allowedWords(allowedList)
                         .bannedWords(bannedList)
                         .hints(hintList)
@@ -121,7 +124,7 @@ public class WriteHandler implements CommandHandler {
             backend.marshallExam(exam, write.getFile());
             return true;
         } catch (ExamBackendException | IOException e) {
-            System.err.println("Could not write exam to file" + e.toString());
+            System.err.println("Could not write exam to file " + e.toString());
             return false;
         }
     }
