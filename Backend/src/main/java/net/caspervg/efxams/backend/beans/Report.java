@@ -29,12 +29,14 @@ import org.jetbrains.annotations.NotNull;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@XmlRootElement(name="report")
 public class Report implements Serializable {
 
     private UUID reportId;
@@ -130,6 +132,7 @@ public class Report implements Serializable {
         private int correct = -1;
         private int wrong = -1;
         private double score = Double.NaN;
+        private LocalDate date = LocalDate.now();
         private @NotNull List<Correction> corrections = new ArrayList<>();
 
         public ReportBuilder(UUID examId) {
@@ -156,6 +159,11 @@ public class Report implements Serializable {
             return this;
         }
 
+        public ReportBuilder date(LocalDate value) {
+            this.date = value;
+            return this;
+        }
+
         public Report build() {
             return new Report(this);
         }
@@ -167,5 +175,6 @@ public class Report implements Serializable {
         this.correct = builder.correct;
         this.wrong = builder.wrong;
         this.score = builder.score;
+        this.date = builder.date;
     }
 }
