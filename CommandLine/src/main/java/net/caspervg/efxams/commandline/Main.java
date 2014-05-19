@@ -25,10 +25,7 @@ package net.caspervg.efxams.commandline;/*
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import net.caspervg.efxams.commandline.argument.*;
-import net.caspervg.efxams.commandline.handler.CommandHandler;
-import net.caspervg.efxams.commandline.handler.ReadHandler;
-import net.caspervg.efxams.commandline.handler.SolveHandler;
-import net.caspervg.efxams.commandline.handler.WriteHandler;
+import net.caspervg.efxams.commandline.handler.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,10 +39,12 @@ public class Main {
         commandHandlers.put("read", new ReadHandler());
         commandHandlers.put("write", new WriteHandler());
         commandHandlers.put("solve", new SolveHandler());
+        commandHandlers.put("merge", new MergeHandler());
 
         commands.put("read", new CommandRead());
         commands.put("write", new CommandWrite());
         commands.put("solve", new CommandSolve());
+        commands.put("merge", new CommandMerge());
     }
 
     public static void main(String[] args) {
@@ -55,6 +54,7 @@ public class Main {
         jc.addCommand("read", commands.get("read"));
         jc.addCommand("write", commands.get("write"));
         jc.addCommand("solve", commands.get("solve"));
+        jc.addCommand("merge", commands.get("merge"));
 
         try {
             jc.parse(args);
