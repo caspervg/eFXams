@@ -24,11 +24,58 @@
 
 package net.caspervg.efxams.commandline.handler;
 
+import com.google.common.io.Files;
+import net.caspervg.efxams.backend.BackendFactory;
+import net.caspervg.efxams.backend.ExamBackend;
+import net.caspervg.efxams.backend.beans.Exam;
+import net.caspervg.efxams.backend.beans.Question;
+import net.caspervg.efxams.backend.exception.ExamBackendException;
 import net.caspervg.efxams.commandline.argument.Command;
+import net.caspervg.efxams.commandline.argument.CommandRead;
+
+import java.util.List;
+import java.util.Scanner;
 
 public class ReadHandler implements CommandHandler {
     @Override
     public boolean handle(Command command) {
-        return false;
+        CommandRead read;
+
+        if (command instanceof CommandRead) {
+            read = (CommandRead) command;
+        } else {
+            System.err.println("Could not parse read command");
+            return false;
+        }
+
+        String fileExtension = Files.getFileExtension(read.getFile().getName());
+        ExamBackend backend = BackendFactory.getBackend(fileExtension);
+        try {
+            Exam exam = backend.unmarshallExam(read.getFile());
+            Scanner in = new Scanner(System.in);
+
+            System.out.println(String.format("Welcome the \"%s\" exam, made by %s on %s", exam.getName(), exam.getAuthor(), exam.getDate()));
+            List<Question> questionList = exam.getQuestions();
+
+            for (int i = 0; i < questionList.size(); i++) {
+                Question question = questionList.get(i);
+
+                System.out.println("");
+                System.out.format("Question %d\n", (i+1));
+
+                System.out.format("-> %10s: %s\n", "Query", question.getQuery());
+                System.out.format("-> %10s: %s\n", "Answer", question.getAnswer());
+                System.out.format("-> %10s: %s\n", "Required", question.getAllowedWords());
+                System.out.format("-> %10s: %s\n", "Banned", question.getBannedWords());
+                System.out.format("-> %10s: %s\n", "Hints", question.getHints());
+            }
+
+        } catch (ExamBackendException e) {
+            System.err.println("Could not read exam from file " + e.toString());
+            return false;
+        }
+
+        return true;
     }
+
 }
