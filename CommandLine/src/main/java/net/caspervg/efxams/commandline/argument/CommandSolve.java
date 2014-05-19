@@ -28,8 +28,6 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 @Parameters(separators = "=", commandDescription = "Solve exercises from a file")
 public class CommandSolve implements Command {
