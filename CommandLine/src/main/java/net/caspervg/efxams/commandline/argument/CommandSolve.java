@@ -45,11 +45,7 @@ public class CommandSolve implements Command {
         return file;
     }
 
-    @Override
-    public List<String> getExtra() {
-        List<String> extra = new ArrayList<>();
-        extra.add(solver);
-
-        return extra;
+    public String getSolver() {
+        return solver;
     }
 }

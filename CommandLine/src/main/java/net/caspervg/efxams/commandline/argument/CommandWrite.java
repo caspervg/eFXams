@@ -34,22 +34,46 @@ import java.util.List;
 @Parameters(separators = "=", commandDescription="Write exercises to a file")
 public class CommandWrite implements Command {
 
-    @Parameter(names = {"-file"}, description = "File to write the exercises to", converter = FileConverter.class)
+    @Parameter(names = {"-f", "--file"}, description = "File to write the exercises to", converter = FileConverter.class)
     private File file;
 
-    @Parameter(names = "--author", description = "Author of the exercises")
+    @Parameter(names = "--name", description = "Name of the exam")
+    private String name;
+
+    @Parameter(names = "--author", description = "Author of the exam")
     private String author;
+
+    @Parameter(names = "--hints", description = "Allow adding hints")
+    private boolean hints = false;
+
+    @Parameter(names = "--banned", description = "Allow adding banned words")
+    private boolean banned = false;
+
+    @Parameter(names = "--allowed", description = "Allow adding required/allowed words")
+    private boolean allowed = false;
 
     @Override
     public File getFile() {
         return file;
     }
 
-    @Override
-    public List<String> getExtra() {
-        List<String> extra = new ArrayList<>();
-        extra.add(author);
+    public String getName() {
+        return name;
+    }
 
-        return extra;
+    public String getAuthor() {
+        return author;
+    }
+
+    public boolean isHints() {
+        return hints;
+    }
+
+    public boolean isBanned() {
+        return banned;
+    }
+
+    public boolean isAllowed() {
+        return allowed;
     }
 }

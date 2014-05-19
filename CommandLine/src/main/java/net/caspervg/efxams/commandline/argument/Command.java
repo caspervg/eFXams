@@ -31,8 +31,4 @@ public interface Command {
     public default File getFile() {
         return null;
     }
-
-    public default List<String> getExtra() {
-        return null;
-    }
 }

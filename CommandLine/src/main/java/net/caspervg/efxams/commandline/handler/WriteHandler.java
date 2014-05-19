@@ -55,11 +55,22 @@ public class WriteHandler implements CommandHandler {
 
         Scanner in = new Scanner(System.in);
 
-        System.out.println("Please enter the name of the examination: ");
-        String examName = in.nextLine();
+        String examName;
+        if (write.getName() == null || write.getName().isEmpty()) {
+            System.out.println("Please enter the name of the examination: ");
+            examName = in.nextLine();
+        } else {
+            examName = write.getName();
+        }
 
-        System.out.println("Please enter the name of the author of the examination: ");
-        String examAuthor = in.nextLine();
+        String examAuthor;
+        if (write.getAuthor() == null || write.getAuthor().isEmpty()) {
+            System.out.println("Please enter the name of the author of the examination: ");
+            examAuthor = in.nextLine();
+        } else {
+            examAuthor = write.getAuthor();
+        }
+
 
         boolean stopped = false;
         int counter = 1;
@@ -71,34 +82,42 @@ public class WriteHandler implements CommandHandler {
 
             if (! questionQuery.equals("STOP")) {
 
-
                 System.out.println(String.format("Enter the answer for question %d", counter));
                 String questionAnswer = in.nextLine();
 
-                System.out.println(String.format("Enter a comma-delimited list of keywords that the answer to question %d should contain to be counted valid", counter));
-                String allowed = in.nextLine();
-                HashSet<String> allowedList = Arrays.asList(allowed.split(","))
-                        .stream()
-                        .map(String::trim)
-                        .filter(s -> ! s.isEmpty())
-                        .collect(Collectors.toCollection(HashSet::new));
+                HashSet<String> allowedList = new HashSet<>();
+                if (write.isAllowed()) {
+                    System.out.format("Enter a comma-delimited list of keywords that the answer to question %d should contain to be counted valid\n", counter);
+                    String allowed = in.nextLine();
+                    allowedList = Arrays.asList(allowed.split(","))
+                            .stream()
+                            .map(String::trim)
+                            .filter(s -> !s.isEmpty())
+                            .collect(Collectors.toCollection(HashSet::new));
+                }
 
-                System.out.println(String.format("Enter a comma-delimited list of keywords that the answer to question %d may not contain to be counted valid", counter));
-                String banned = in.nextLine();
-                HashSet<String> bannedList = Arrays.asList(banned.split(","))
-                        .stream()
-                        .map(String::trim)
-                        .filter(s -> ! s.isEmpty())
-                        .collect(Collectors.toCollection(HashSet::new));
+                HashSet<String> bannedList = new HashSet<>();
+                if (write.isBanned()) {
+                    System.out.println(String.format("Enter a comma-delimited list of keywords that the answer to question %d may not contain to be counted valid", counter));
+                    String banned = in.nextLine();
+                    bannedList = Arrays.asList(banned.split(","))
+                            .stream()
+                            .map(String::trim)
+                            .filter(s -> !s.isEmpty())
+                            .collect(Collectors.toCollection(HashSet::new));
+                }
 
-                System.out.println(String.format("Enter a comma-delimited list of hints that the user can receive for question %d", counter));
-                String hints = in.nextLine();
-                LinkedList<String> hintList = Arrays.asList(hints.split(","))
-                        .stream()
-                        .map(String::trim)
-                        .filter(s -> ! s.isEmpty())
-                        .collect(Collectors.toCollection(LinkedList::new));
-                System.out.println(hintList.size());
+                LinkedList<String> hintList = new LinkedList<>();
+                if (write.isHints()) {
+                    System.out.println(String.format("Enter a comma-delimited list of hints that the user can receive for question %d", counter));
+                    String hints = in.nextLine();
+                    hintList = Arrays.asList(hints.split(","))
+                            .stream()
+                            .map(String::trim)
+                            .filter(s -> !s.isEmpty())
+                            .collect(Collectors.toCollection(LinkedList::new));
+                    System.out.println(hintList.size());
+                }
 
                 questionList.add(new Question.QuestionBuilder(questionQuery, questionAnswer)
                         .allowedWords(allowedList)
