@@ -34,6 +34,7 @@ import net.caspervg.efxams.commandline.argument.Command;
 import net.caspervg.efxams.commandline.argument.CommandWrite;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -134,6 +135,7 @@ public class WriteHandler implements CommandHandler {
         Exam exam = new Exam.ExamBuilder(examName)
                 .author(examAuthor)
                 .questions(questionList)
+                .date(LocalDate.now())
                 .build();
 
         try {

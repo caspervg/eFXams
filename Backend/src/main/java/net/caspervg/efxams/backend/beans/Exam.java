@@ -50,7 +50,6 @@ public class Exam implements Serializable {
 
     public Exam() {
         questions = new ArrayList<>();
-        date = LocalDate.now();
     }
 
     public UUID getId() {
@@ -125,6 +124,7 @@ public class Exam implements Serializable {
 
         // Optional
         private String author = "";
+        private LocalDate date = LocalDate.now();
         private @NotNull List<Question> questions = new ArrayList<>();
 
         public ExamBuilder(String name) {
@@ -142,6 +142,11 @@ public class Exam implements Serializable {
             return this;
         }
 
+        public ExamBuilder date(LocalDate value) {
+            this.date = value;
+            return this;
+        }
+
         public Exam build() {
             return new Exam(this);
         }
@@ -153,5 +158,6 @@ public class Exam implements Serializable {
         this.name = builder.name;
         this.author = builder.author;
         this.questions = builder.questions;
+        this.date = builder.date;
     }
 }
