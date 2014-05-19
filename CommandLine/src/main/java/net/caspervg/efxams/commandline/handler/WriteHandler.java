@@ -143,7 +143,7 @@ public class WriteHandler implements CommandHandler {
             backend.marshallExam(exam, write.getFile());
 
             System.out.println("");
-            System.out.format("%s has been written succesfully to %s", exam.getName(), write.getFile().getAbsolutePath());
+            System.out.format("%s has been written successfully to %s", exam.getName(), write.getFile().getAbsolutePath());
 
             return true;
         } catch (ExamBackendException | IOException e) {
