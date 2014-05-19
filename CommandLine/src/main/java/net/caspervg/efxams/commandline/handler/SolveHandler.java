@@ -34,8 +34,11 @@ import net.caspervg.efxams.commandline.argument.Command;
 import net.caspervg.efxams.commandline.argument.CommandRead;
 import net.caspervg.efxams.commandline.argument.CommandSolve;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class SolveHandler implements CommandHandler {
     @Override
@@ -57,7 +60,12 @@ public class SolveHandler implements CommandHandler {
 
             System.out.println(String.format("Welcome the \"%s\" exam, made by %s!", exam.getName(), exam.getAuthor()));
             System.out.println("Type HINT if you want a hint");
-            List<Question> questionList = exam.getQuestions();
+
+            List<Question> questionList = exam.getQuestions().stream().collect(Collectors.toCollection(LinkedList::new));
+
+            if (solve.getRandom()) {
+                Collections.shuffle(questionList);
+            }
 
             int correct = 0, wrong = 0;
             for (int i = 0; i < questionList.size(); i++) {

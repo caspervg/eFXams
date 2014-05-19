@@ -40,6 +40,9 @@ public class CommandSolve implements Command {
     @Parameter(names = "--solver", description = "Person solving the exercises")
     private String solver;
 
+    @Parameter(names = "--random", description = "Randomize the order of the questions in the exam")
+    private boolean random = false;
+
     @Override
     public File getFile() {
         return file;
@@ -47,5 +50,9 @@ public class CommandSolve implements Command {
 
     public String getSolver() {
         return solver;
+    }
+
+    public boolean getRandom() {
+        return random;
     }
 }
