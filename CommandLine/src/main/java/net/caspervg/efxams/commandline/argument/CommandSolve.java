@@ -41,6 +41,9 @@ public class CommandSolve implements Command {
     @Parameter(names = "--random", description = "Randomize the order of the questions in the exam")
     private boolean random = false;
 
+    @Parameter(names = "--report", description = "Generate a report after filling out the exam", converter = FileConverter.class)
+    private File report = null;
+
     @Override
     public File getFile() {
         return file;
@@ -53,4 +56,9 @@ public class CommandSolve implements Command {
     public boolean getRandom() {
         return random;
     }
+
+    public File getReport() {
+        return report;
+    }
+    
 }

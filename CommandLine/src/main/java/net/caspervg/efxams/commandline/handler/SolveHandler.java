@@ -27,17 +27,20 @@ package net.caspervg.efxams.commandline.handler;
 import com.google.common.io.Files;
 import net.caspervg.efxams.backend.BackendFactory;
 import net.caspervg.efxams.backend.ExamBackend;
+import net.caspervg.efxams.backend.ReportBackend;
+import net.caspervg.efxams.backend.ReportBackendFactory;
+import net.caspervg.efxams.backend.beans.Correction;
 import net.caspervg.efxams.backend.beans.Exam;
 import net.caspervg.efxams.backend.beans.Question;
+import net.caspervg.efxams.backend.beans.Report;
 import net.caspervg.efxams.backend.exception.ExamBackendException;
+import net.caspervg.efxams.backend.exception.ReportBackendException;
 import net.caspervg.efxams.commandline.argument.Command;
 import net.caspervg.efxams.commandline.argument.CommandRead;
 import net.caspervg.efxams.commandline.argument.CommandSolve;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SolveHandler implements CommandHandler {
@@ -62,12 +65,14 @@ public class SolveHandler implements CommandHandler {
             System.out.println("Type HINT if you want a hint");
 
             List<Question> questionList = exam.getQuestions().stream().collect(Collectors.toCollection(LinkedList::new));
+            List<Correction> correctionList = new ArrayList<>();
 
             if (solve.getRandom()) {
                 Collections.shuffle(questionList);
             }
 
             int correct = 0, wrong = 0;
+            double score = 0;
             for (int i = 0; i < questionList.size(); i++) {
                 Question question = questionList.get(i);
 
@@ -102,12 +107,39 @@ public class SolveHandler implements CommandHandler {
                     System.out.println("Sorry, that's wrong! The correct answer was: ");
                     System.out.println(question.getAnswer());
                     System.out.println("Current score: ");
+
+                    if (solve.getReport() != null) {
+                        correctionList.add(new Correction(question.getId(), userAnswer));
+                    }
                 }
-                System.out.format("+%d | -%d | %d/%d (%.2f%%)\n", correct, wrong, correct, (i+1), ((double) correct / (double) (i+1)) * 100);
+                System.out.format("+%d | -%d | %d/%d (%.2f%%)\n", correct, wrong, correct, (i + 1), ((double) correct / (double) (i + 1)) * 100);
+            }
+
+            score = ((double) correct / (double) questionList.size()) * 100;
+
+            if (solve.getReport() != null) {
+                Report report = new Report.ReportBuilder(exam.getId())
+                        .correct(correct)
+                        .wrong(wrong)
+                        .score(score)
+                        .corrections(correctionList)
+                        .build();
+
+                String reportFileExtension = Files.getFileExtension(solve.getReport().getName());
+                ReportBackend reportBackend = ReportBackendFactory.getBackend(reportFileExtension);
+
+                try {
+                    //noinspection ResultOfMethodCallIgnored
+                    solve.getReport().createNewFile();
+                    reportBackend.marshallReport(report, solve.getReport());
+                } catch (ReportBackendException | IOException e) {
+                    System.err.println("Could not write report to file " + e.toString());
+                    return false;
+                }
             }
 
             System.out.println("");
-            System.out.format("You have finished the exam with a score of +%d | -%d | %d/%d (%.2f%%)", correct, wrong, correct, questionList.size(), ((double) correct / (double) questionList.size()) * 100);
+            System.out.format("You have finished the exam with a score of +%d | -%d | %d/%d (%.2f%%)", correct, wrong, correct, questionList.size(), score);
 
         } catch (ExamBackendException e) {
             System.err.println("Could not read exam from file " + e.toString());
