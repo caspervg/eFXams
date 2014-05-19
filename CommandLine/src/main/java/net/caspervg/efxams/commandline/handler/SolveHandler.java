@@ -95,11 +95,11 @@ public class SolveHandler implements CommandHandler {
                     System.out.println(question.getAnswer());
                     System.out.println("Current score: ");
                 }
-                System.out.format("+%d | -%d | #%3f", correct, wrong, (double) correct / (double) (i+1));
+                System.out.format("+%d | -%d | %d/%d (%.2f%%)\n", correct, wrong, correct, (i+1), ((double) correct / (double) (i+1)) * 100);
             }
 
             System.out.println("");
-            System.out.format("You have finished the exam with a score of +%d | -%d | #%3f", correct, wrong, (double) correct / (double) (questionList.size()));
+            System.out.format("You have finished the exam with a score of +%d | -%d | %d/%d (%.2f%%)", correct, wrong, correct, questionList.size(), ((double) correct / (double) questionList.size()) * 100);
 
         } catch (ExamBackendException e) {
             System.err.println("Could not read exam from file " + e.toString());
@@ -110,8 +110,6 @@ public class SolveHandler implements CommandHandler {
     }
 
     private boolean evaluateAnswer(String answer, Question question) {
-        if (answer.equalsIgnoreCase(question.getAnswer())) return true;
-
         for (String required : question.getAllowedWords()) {
             if (! answer.toLowerCase().contains(required.toLowerCase())) return false;
         }
@@ -120,6 +118,6 @@ public class SolveHandler implements CommandHandler {
             if (answer.toLowerCase().contains(banned.toLowerCase())) return false;
         }
 
-        return true;
+        return answer.equalsIgnoreCase(question.getAnswer());
     }
 }
