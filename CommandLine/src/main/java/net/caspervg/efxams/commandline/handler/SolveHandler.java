@@ -42,7 +42,7 @@ public class SolveHandler implements CommandHandler {
     public boolean handle(Command command) {
         CommandSolve solve;
 
-        if (command instanceof CommandRead) {
+        if (command instanceof CommandSolve) {
             solve = (CommandSolve) command;
         } else {
             System.err.println("Could not parse read command");
@@ -95,8 +95,11 @@ public class SolveHandler implements CommandHandler {
                     System.out.println(question.getAnswer());
                     System.out.println("Current score: ");
                 }
-                System.out.format("+%d | -%d | #%5f", correct, wrong, (double) correct / (double) wrong);
+                System.out.format("+%d | -%d | #%3f", correct, wrong, (double) correct / (double) wrong);
             }
+
+            System.out.println("");
+            System.out.format("You have finished the exam with a score of +%d | -%d | #%3f", correct, wrong, (double) correct / (double) wrong);
 
         } catch (ExamBackendException e) {
             System.err.println("Could not read exam from file " + e.toString());
