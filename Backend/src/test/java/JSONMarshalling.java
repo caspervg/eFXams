@@ -42,8 +42,8 @@ public class JsonMarshalling {
 
     @Test
     public void testManualJsonMarshalling() {
-        Question q1 = new Question.QuestionBuilder("Question1Title", "Question1Question", "Question1Answer").build();
-        Question q2 = new Question.QuestionBuilder("Question2Title", "Question2Question", "Question2Answer").build();
+        Question q1 = new Question.QuestionBuilder("Question1Question", "Question1Answer").build();
+        Question q2 = new Question.QuestionBuilder("Question2Question", "Question2Answer").build();
 
         List<Question> questionList = new ArrayList<>();
         questionList.addAll(Arrays.asList(q1, q2));
@@ -62,8 +62,8 @@ public class JsonMarshalling {
 
     @Test
     public void testAutomaticJsonMarshalling() throws ExamBackendException {
-        Question q1 = new Question.QuestionBuilder("Question1Title", "Question1Question", "Question1Answer").build();
-        Question q2 = new Question.QuestionBuilder("Question2Title", "Question2Question", "Question2Answer").build();
+        Question q1 = new Question.QuestionBuilder("Question1Question", "Question1Answer").build();
+        Question q2 = new Question.QuestionBuilder("Question2Question", "Question2Answer").build();
 
         List<Question> questionList = new ArrayList<>();
         questionList.addAll(Arrays.asList(q1, q2));

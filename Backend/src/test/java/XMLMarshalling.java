@@ -35,7 +35,9 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -43,12 +45,11 @@ public class XmlMarshalling {
 
     @Test
     public void testXmlManualMarshalling() throws JAXBException {
-        Question q1 = new Question.QuestionBuilder("Question1Title", "Question1Question", "Question1Answer")
-                .hints(Arrays.asList("Hint1", "Hint2"))
-                .allowedWords(Arrays.asList("Allowed1", "Allowed2"))
-                .bannedWords(Arrays.asList("Banned1", "Banned2"))
+        Question q1 = new Question.QuestionBuilder("Question1Question", "Question1Answer")
+                .allowedWords(Arrays.asList("Allowed1", "Allowed2").stream().collect(Collectors.toCollection(HashSet::new)))
+                .bannedWords(Arrays.asList("Banned1", "Banned2").stream().collect(Collectors.toCollection(HashSet::new)))
                 .build();
-        Question q2 = new Question.QuestionBuilder("Question2Title", "Question2Question", "Question2Answer").build();
+        Question q2 = new Question.QuestionBuilder("Question2Question", "Question2Answer").build();
 
         List<Question> questionList = new ArrayList<>();
         questionList.addAll(Arrays.asList(q1, q2));
@@ -75,8 +76,8 @@ public class XmlMarshalling {
 
     @Test
     public void testXmlAutomaticMarshalling() throws ExamBackendException {
-        Question q1 = new Question.QuestionBuilder("Question1Title", "Question1Question", "Question1Answer").build();
-        Question q2 = new Question.QuestionBuilder("Question2Title", "Question2Question", "Question2Answer").build();
+        Question q1 = new Question.QuestionBuilder("Question1Question", "Question1Answer").build();
+        Question q2 = new Question.QuestionBuilder("Question2Question", "Question2Answer").build();
 
         List<Question> questionList = new ArrayList<>();
         questionList.addAll(Arrays.asList(q1, q2));
