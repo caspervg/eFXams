@@ -38,7 +38,7 @@ import java.io.File;
 public class XmlReportBackend implements ReportBackend {
 
     @Override
-    public void marshallExam(Report report, File file) throws ReportBackendException {
+    public void marshallReport(Report report, File file) throws ReportBackendException {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Report.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();

@@ -35,7 +35,7 @@ import java.io.*;
 public class JsonReportBackend implements ReportBackend {
 
     @Override
-    public void marshallExam(Report report, File file) throws ReportBackendException {
+    public void marshallReport(Report report, File file) throws ReportBackendException {
         try (Writer writer = new FileWriter(file)) {
             new Gson().toJson(report, writer);
         } catch (IOException ex) {

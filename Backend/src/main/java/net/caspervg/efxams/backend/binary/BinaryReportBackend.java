@@ -38,7 +38,7 @@ import java.io.*;
 public class BinaryReportBackend implements ReportBackend {
 
     @Override
-    public void marshallExam(Report report, File file) throws ReportBackendException {
+    public void marshallReport(Report report, File file) throws ReportBackendException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
             out.writeObject(report);
         } catch (IOException ex) {

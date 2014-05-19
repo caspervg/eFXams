@@ -30,6 +30,6 @@ import net.caspervg.efxams.backend.exception.ReportBackendException;
 import java.io.File;
 
 public interface ReportBackend {
-    public void marshallExam(Report report, File file) throws ReportBackendException;
+    public void marshallReport(Report report, File file) throws ReportBackendException;
     public Report unmarshallReport(File file) throws ReportBackendException;
 }
