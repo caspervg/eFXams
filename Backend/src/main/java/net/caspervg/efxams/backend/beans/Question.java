@@ -35,7 +35,6 @@ import java.util.*;
 public class Question implements Serializable {
 
     private UUID id;
-    private String title;
     private String query;
     private String answer;
     private @NotNull LinkedList<String> hints;
@@ -55,15 +54,6 @@ public class Question implements Serializable {
     @XmlAttribute
     private void setId(UUID id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    @XmlElement
-    private void setTitle(String title) {
-        this.title = title;
     }
 
     public String getQuery() {
@@ -138,7 +128,6 @@ public class Question implements Serializable {
     public static class QuestionBuilder {
         // Required
         private final UUID id;
-        private final String title;
         private final String query;
         private final String answer;
 
@@ -147,9 +136,8 @@ public class Question implements Serializable {
         private Set<String> allowedWords = new HashSet<>();
         private Set<String> bannedWords = new HashSet<>();
 
-        public QuestionBuilder(String title, String query, String answer) {
+        public QuestionBuilder(String query, String answer) {
             this.id = UUID.randomUUID();
-            this.title = title;
             this.query = query;
             this.answer = answer;
         }
@@ -178,7 +166,6 @@ public class Question implements Serializable {
         this();
 
         this.id = builder.id;
-        this.title = builder.title;
         this.query = builder.query;
         this.answer = builder.answer;
         this.hints = builder.hints;

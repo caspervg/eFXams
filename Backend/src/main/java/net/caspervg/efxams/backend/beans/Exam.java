@@ -33,6 +33,8 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -43,10 +45,12 @@ public class Exam implements Serializable {
     private UUID id;
     private String name;
     private String author;
+    private LocalDate date;
     private @NotNull List<Question> questions;
 
     public Exam() {
         questions = new ArrayList<>();
+        date = LocalDate.now();
     }
 
     public UUID getId() {
@@ -76,6 +80,15 @@ public class Exam implements Serializable {
         this.author = author;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
+    @XmlElement
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
     @NotNull
     public List<Question> getQuestions() {
         return questions;
@@ -96,6 +109,7 @@ public class Exam implements Serializable {
             if (! this.author.equals(exam.getAuthor())) return false;
             if (! this.id.equals(exam.getId())) return false;
             if (! this.name.equals(exam.getName())) return false;
+            if (! this.date.equals(exam.getDate())) return false;
 
             if (! this.questions.equals(exam.getQuestions())) return false;
 
