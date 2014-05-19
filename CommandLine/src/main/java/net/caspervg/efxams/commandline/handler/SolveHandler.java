@@ -95,11 +95,11 @@ public class SolveHandler implements CommandHandler {
                     System.out.println(question.getAnswer());
                     System.out.println("Current score: ");
                 }
-                System.out.format("+%d | -%d | #%3f", correct, wrong, (double) correct / (double) wrong);
+                System.out.format("+%d | -%d | #%3f", correct, wrong, (double) correct / (double) (i+1));
             }
 
             System.out.println("");
-            System.out.format("You have finished the exam with a score of +%d | -%d | #%3f", correct, wrong, (double) correct / (double) wrong);
+            System.out.format("You have finished the exam with a score of +%d | -%d | #%3f", correct, wrong, (double) correct / (double) (questionList.size()));
 
         } catch (ExamBackendException e) {
             System.err.println("Could not read exam from file " + e.toString());
