@@ -141,6 +141,10 @@ public class WriteHandler implements CommandHandler {
             write.getFile().createNewFile();
 
             backend.marshallExam(exam, write.getFile());
+
+            System.out.println("");
+            System.out.format("%s has been written succesfully to %s", exam.getName(), write.getFile().getAbsolutePath());
+
             return true;
         } catch (ExamBackendException | IOException e) {
             System.err.println("Could not write exam to file " + e.toString());
